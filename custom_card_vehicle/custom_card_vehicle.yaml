@@ -1,0 +1,394 @@
+  custom_card_vehicle:
+    variables:
+      name: 
+      label:
+      range:
+      soc:
+      soc_aux:
+      engine:
+      lock:
+      defrost:
+      ac:
+      charging:
+      cable:
+      image:
+    label: "[[[ return variables.label ]]]"
+    show_name: false
+    show_icon: false
+    show_label: true
+    show_state: false
+    tap_action: none
+    styles:
+      grid:
+        - grid-template-areas: |
+            "range"
+            "l"
+            "img"
+            "engine"
+            "battery"
+            "controls"
+          grid-template-columns: 1fr
+          grid-template-rows: 1fr repeat(5, min-content)
+      card:
+        
+        - border-radius: "var(--border-radius)"
+        - overflow: visible
+        - background: none
+      label:
+        - text-align: center
+        - font-size: "var(--fs-400)"
+        - font-family: "Montserrat"
+        - font-weight: 500
+        - align-self: start
+        - color: "var(--contrast-100)"
+      custom_fields:
+        range:
+          - align-self: end
+          - font-size: "var(--fs-xl)"
+          - font-family: Montserrat
+          - font-weight: 500
+          - background: none
+          - color: "var(--contrast-100)"
+          - overflow: visible
+        engine: 
+          - background: none
+          - border-radius: 25px
+          - margin-top: 50px
+          - padding: 2px 5px 2px 5px
+          - justify-self: center
+          - font-size: "var(--fs-400)"
+          - font-family: Montserrat
+          - font-weight: 500
+          - color: "var(--contrast-100)"
+          - overflow: visible
+        img:
+          - padding-top: 65px
+          - border: none
+          - justify-self: center
+          - box-shadow: none
+          - background: none
+          - width: 100%  
+
+    custom_fields:       
+      range: >
+        [[[ return variables.range ]]]
+      engine: >
+          [[[
+            if(states[variables.engine].state  == 'on') {
+              return ' Vehicle is running. '
+            }
+            else if(states[variables.engine].state  == 'off' || states[variables.cable].state == 'off') {
+              return ' Vehicle parked, unplugged. '
+            }
+            else if(states[variables.engine].state  == 'off' || states[variables.cable].state == 'on' || states[variables.charging].state == 'off') {
+              return ' Vehicle parked, plugged in but not charging. '
+            }
+            else if(states[variables.engine].state  == 'off' || states[variables.cable].state == 'on' || states[variables.charging].state == 'on') {
+              return ' Vehicle parked, currently charging! '
+            }
+            else {
+              return ' Running away from you! '
+            }
+          ]]]
+      img:
+        card:
+          type: picture
+          card_mod:
+            style: |
+              ha-card {
+                box-shadow: none;
+                background: none;
+              }
+          image: >
+            [[[ return variables.image ]]]
+          tap_action:
+            action: none
+          hold_action:
+            action: none
+      battery:
+        card:
+          type: "custom:button-card"
+          show_name: false
+          show_icon: false
+          show_label: false
+          show_state: false
+          tap_action:
+            action: none
+          styles:
+            grid:
+              - grid-template-areas: '"main_battery" "12v"'
+              - grid-template-columns: 1fr 1fr
+              - grid-template-rows: 1fr 
+              - column-gap: 8px
+            card:
+              - background: none
+              - overflow: visible
+            custom_fields:
+              main_battery:
+                - align-self: middle
+                - justify-self: middle
+              12v:
+                - align-self: middle
+                - justify-self: middle
+
+          custom_fields:
+            main_battery:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.soc ]]]"
+                show_name: true
+                show_icon: true
+                show_label: false
+                show_state: true
+                styles:
+                  grid:
+                    - grid-template-areas: '"n n" "s i"'
+                    - grid-template-rows: 1fr min-content
+                    - grid-template-columns: 3fr 1fr
+                    - row-gap: 8px
+                  card:
+                    - height: 100%
+                    - border-radius: "var(--border-radius)"
+                    - box-shadow: "var(--box-shadow)"
+                    - padding: 1rem
+                  icon:
+                    - justify-self: end
+                    - align-self: end
+                    - aligh-content: end
+                    - overflow: hidden
+                    - padding-left: 30px
+                  name:
+                    - text-align: start
+                    - font-size: "var(--fs-500)"
+                    - font-family: Montserrat
+                    - font-weight: 600
+                    - justify-self: start
+                    - align-self: start
+                    - color: "var(--contrast-100)"
+                    - overflow: visible
+                  label:
+                    - text-align: start
+                    - font-size: "var(--fs-400)"
+                    - font-family: Montserrat
+                    - font-weight: 500
+                    - justify-self: start
+                    - align-self: start
+                    - color: "var(--contrast-100)"
+                    - overflow: visible
+                  state:
+                    - text-align: left
+                    - font-size: "var(--fs-400)"
+                    - font-family: Montserrat
+                    - font-weight: 500
+                    - justify-self: start
+                    - align-self: center
+                    - color: "var(--contrast-100)"
+                    - overflow: visible
+            12v:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.soc_aux ]]]"
+                show_name: true
+                show_icon: true
+                show_label: false
+                show_state: true
+                styles:
+                  grid:
+                    - grid-template-areas: '"n n" "s i"'
+                    - grid-template-rows: 1fr min-content
+                    - grid-template-columns: 3fr 1fr
+                    - row-gap: 8px
+                  card:
+                    - height: 100%
+                    - border-radius: "var(--border-radius)"
+                    - box-shadow: "var(--box-shadow)"
+                    - padding: 1rem
+                  icon:
+                    - color: "var(--contrast-100)"
+                    - justify-self: end
+                    - align-self: end
+                    - aligh-content: end
+                    - overflow: hidden
+                    - padding-left: 30px
+                  name:
+                    - text-align: left
+                    - font-size: "var(--fs-500)"
+                    - font-family: Montserrat
+                    - font-weight: 600
+                    - justify-self: start
+                    - align-self: end
+                    - color: "var(--contrast-100)"
+                    - overflow: visible
+                  label:
+                    - text-align: left
+                    - font-size: "var(--fs-400)"
+                    - font-family: Montserrat
+                    - font-weight: 500
+                    - justify-self: start
+                    - align-self: center
+                    - color: "var(--contrast-100)"
+                    - overflow: visible
+                  state:
+                    - text-align: left
+                    - font-size: "var(--fs-400)"
+                    - font-family: Montserrat
+                    - font-weight: 500
+                    - justify-self: start
+                    - align-self: center
+                    - color: "var(--contrast-100)"
+                    - overflow: visible
+
+      controls:
+        card:
+          type: "custom:button-card"
+          show_name: false
+          show_icon: false
+          show_label: false
+          show_state: true
+          tap_action:
+            action: none
+          styles:
+            grid:
+              - grid-template-areas: '"doorlock defrost ac" '
+              - grid-template-columns: 1fr 1fr 1fr
+              - grid-template-row: 1fr
+              - column-gap: 8px
+            card:
+              - justify-self: start
+              - background: none
+              - overflow: visible
+              - padding: 0 0 0 0
+
+          custom_fields:
+            doorlock:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.lock ]]]"
+                show_name: false
+                show_icon: true
+                show_label: false
+                show_state: true
+                state:
+                  - value: "locked"
+                    icon: mdi:lock-outline
+                    styles:
+                      icon:
+                        - color: "var(--contrast-100)"
+                      state:
+                        - font-size: "var(--fs-400)"
+                        - font-family: Montserrat
+                        - font-weight: 500
+                        - color: "var(--contrast-100)"
+                  - value: "unlocked"
+                    icon: mdi:lock-open-outline
+                    styles:
+                      card:
+                        - background: "var(--contrast-100)"
+                      state:
+                        - font-size: "var(--fs-400)"
+                        - font-family: Montserrat
+                        - font-weight: 500
+                        - color: "var(--contrast-0)"
+                      icon:
+                        - color: "var(--contrast-0)"
+                      custom_fields:
+                        icon:
+                          - color: "var(--contrast-0)"
+                styles:
+                  grid:
+                    - grid-template-areas: '"i" "s"'
+                    - grid-template-rows: 1fr
+                    - grid-template-columns: 1fr 
+                    - row-gap: 8px
+                  card:
+                    - border-radius: "var(--border-radius)"
+                    - box-shadow: "var(--box-shadow)"
+                    - padding: 1rem
+            defrost:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.defrost ]]]"
+                show_name: false
+                show_icon: true
+                show_label: false
+                show_state: true
+                state:
+                  - value: "off"
+                    styles:
+                      icon:
+                        - icon: mdi:locked
+                        - color: "var(--contrast-100)"
+                      state: 
+                        - font-size: "var(--fs-400)"
+                        - font-family: Montserrat
+                        - font-weight: 500
+                        - color: "var(--contrast-100)"
+                  - value: "on"
+                    icon: mdi:lock-open-outline
+                    styles:
+                      card:
+                        - background: "var(--contrast-100)"
+                      state:
+                        - font-size: "var(--fs-400)"
+                        - font-family: Montserrat
+                        - font-weight: 500
+                        - color: "var(--contrast-100)"
+                      icon:
+                        - color: "var(--contrast-100)"
+                      custom_fields:
+                        icon:
+                          - color: "var(--contrast-0)"
+                styles:
+                  grid:
+                    - grid-template-areas: '"i" "s"'
+                    - grid-template-rows: 1fr
+                    - grid-template-columns: 1fr 
+                    - row-gap: 8px
+                  card:
+                    - border-radius: "var(--border-radius)"
+                    - box-shadow: "var(--box-shadow)"
+                    - padding: 1rem
+            ac:
+              card:
+                type: custom:button-card
+                entity: "[[[ return variables.ac ]]]"
+                show_name: false
+                show_icon: true
+                show_label: false
+                show_state: true
+                state:
+                  - value: "off"
+                    styles:
+                      icon:
+                        - icon: mdi:locked
+                        - color: "var(--contrast-100)"
+                      state: 
+                        - font-size: "var(--fs-400)"
+                        - font-family: Montserrat
+                        - font-weight: 500
+                        - color: "var(--contrast-100)"
+                  - value: "on"
+                    icon: mdi:lock-open-outline
+                    styles:
+                      card:
+                        - background: "var(--contrast-100)"
+                      state:
+                        - font-size: "var(--fs-400)"
+                        - font-family: Montserrat
+                        - font-weight: 500
+                        - color: "var(--contrast-100)"
+                      icon:
+                        - color: "var(--contrast-100)"
+                      custom_fields:
+                        icon:
+                          - color: "var(--contrast-0)"
+                styles:
+                  grid:
+                    - grid-template-areas: '"i" "s"'
+                    - grid-template-rows: 1fr
+                    - grid-template-columns: 1fr 
+                    - row-gap: 8px
+                  card:
+                    - border-radius: "var(--border-radius)"
+                    - box-shadow: "var(--box-shadow)"
+                    - padding: 1rem
