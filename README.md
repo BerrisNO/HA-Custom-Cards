@@ -4,7 +4,7 @@ My custom cards for Home Assistant.
 All cards are extentions of a already exisitng theme, [MiniHass MKII](https://github.com/fredrikpersson92/minihass/tree/main)
 
 # Custom Vehicle Card
-![Custom_vehicle](/custom_card_png)
+![Custom_vehicle](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/custom_card_vehicle/vehicle_card.png)
 
 Note: You will need the following lovelace resources to make this work. 
 
