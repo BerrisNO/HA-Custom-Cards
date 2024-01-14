@@ -1,0 +1,18 @@
+- type: "custom:button-card" #custom card for vehicle
+    template:
+      - custom_card_vehicle
+    variables:
+      label: Battery Range # Test only
+      range: > # change the sensor "mg5_range" to a sensor stating remaining milage on the battery.
+            [[[ return states['sensor.mg5_range'].state + '<span
+            style="font-size:0.2em">km</span>' ]]] 
+      soc: sensor.mg5_soc # Sensor from main vehicle battery
+      soc_aux: sensor.12v_battery_voltage # sensor for vehicle 12v battery
+      engine: binary_sensor.vehicle_running # Sensor from your vehicle checking if engine is: "on" or "off"
+      lock: lock.mg5_doors_lock # Lock entity for the lock you want to open
+      defrost: switch.mg5_front_window_defroster_heating # Switch entity for defrosting your front window
+      defrost2: switch.mg5_rear_window_defroster_heating # Switch entity for defrosting your rear window
+      ac: climate.mg5_vehicle_climate # climate entity for turning on/off climate (will open defult climate card)
+      charging: binary_sensor.mg5_battery_charging # sensor fro vehicle, checking if the car is charging or not.
+      cable: binary_sensor.mg5_cable # sensor from vehicle checking if the cable is plugged in or not.
+      image: local/images/vehicle/mg5.png   # Image link for your vehicle, use transperant background / PNG images
