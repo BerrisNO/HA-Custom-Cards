@@ -24,13 +24,14 @@
             "range"
             "l"
             "img"
+            "pulse"
+            "pulse2"
             "engine"
             "battery"
             "controls"
           grid-template-columns: 1fr
-          grid-template-rows: 1fr repeat(5, min-content)
+          grid-template-rows: 1fr repeat(7, min-content)
       card:
-        
         - border-radius: "var(--border-radius)"
         - overflow: visible
         - background: none
@@ -53,7 +54,6 @@
         engine: 
           - background: none
           - border-radius: 25px
-          - margin-top: 50px
           - padding: 2px 5px 2px 5px
           - justify-self: center
           - font-size: "var(--fs-400)"
@@ -62,14 +62,116 @@
           - color: "var(--contrast-100)"
           - overflow: visible
         img:
-          - padding-top: 65px
-          - border: none
-          - justify-self: center
-          - box-shadow: none
-          - background: none
-          - width: 100%  
+        pulse: 
+          - position: absolute
+          - top: 56%
+          - left: 50%
+          - margin-top: 1rem
+          - margin-left: '-10rem'
+        pulse2: 
+          - position: absolute
+          - top: 56%
+          - left: 55%
+          - margin-top: 1rem
+          - margin-left: '-10rem'
+    custom_fields:     
+      pulse:
+        card:
+          type: custom:button-card
+          entity: >
+             [[[ return variables.charging ]]]
+          show_name: false
+          show_icon: false
+          show_state: false
+          state:
+            - value: 'off'
+              styles:
+                card:
+                  - height: 2rem
+                  - width: 16rem
+                  - top: -4rem
+                  - left: 1.7rem
+                  - background-color: transparent !important 
+            - value: 'on'
+              styles:
+                card:
+                  - height: 2rem
+                  - width: 16rem
+                  - top: -4rem
+                  - left: 1.7rem
+                  - border: 2px solid
+                  - background-color: transparent !important 
+                  - border-radius: 50%
+                  - border: 2px solid rgba(0, 255, 0, 1);
+                  - opacity: 0
+                  - box-shadow: 
+                    - 0 0 10px 3px rgba(0, 255, 0, 1)  
+                    - inset 0 0 5px 2px rgba(0, 255, 0, 1);
+                  - animation: pulse 2.5s infinite
+          extra_styles: |
+              @keyframes 
+              pulse {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.5);
+                  }
+                50% {
+                    opacity: 1;
 
-    custom_fields:       
+                  }
+                100% {
+                    opacity: 0;
+                    transform: scale(1.7);
+                  }
+                }         
+      pulse2:
+        card:
+          type: custom:button-card
+          entity: >
+             [[[ return variables.charging ]]]
+          show_name: false
+          show_icon: false
+          show_state: false
+          state:
+            - value: 'off'
+              styles:
+                card:
+                  - height: 2rem
+                  - width: 16rem
+                  - top: -4rem
+                  - background-color: transparent !important 
+            - value: 'on'
+              styles:
+                card:
+                  - height: 2rem
+                  - width: 16rem
+                  - top: -4rem
+                  - border: 2px solid
+                  - background-color: transparent !important 
+                  - border-radius: 50%
+                  - border: 2px solid rgba(0, 255, 0, 1);
+                  - opacity: 0
+                  - box-shadow: 
+                    - 0 0 10px 3px rgba(0, 255, 0, 1)  
+                    - inset 0 0 5px 2px rgba(0, 255, 0, 1);
+                  - animation: pulse 2.5s infinite
+                  - animation-delay: 1.25s
+          extra_styles: |
+              @keyframes 
+              pulse {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.5);
+                  }
+                50% {
+                    opacity: 1;
+
+                  }
+                100% {
+                    opacity: 0;
+                    transform: scale(1.7);
+                  }
+                }         
       range: >
         [[[ return variables.range ]]]
       engine: >
@@ -77,14 +179,14 @@
             if(states[variables.engine].state  == 'on') {
               return ' Vehicle is running. '
             }
-            else if(states[variables.engine].state  == 'off' || states[variables.cable].state == 'off') {
+            else if(states[variables.engine].state  == 'off' && states[variables.cable].state == 'off') {
               return ' Vehicle parked, unplugged. '
             }
-            else if(states[variables.engine].state  == 'off' || states[variables.cable].state == 'on' || states[variables.charging].state == 'off') {
+            else if(states[variables.engine].state  == 'off' && states[variables.cable].state == 'on' && states[variables.charging].state == 'off') {
               return ' Vehicle parked, plugged in but not charging. '
             }
-            else if(states[variables.engine].state  == 'off' || states[variables.cable].state == 'on' || states[variables.charging].state == 'on') {
-              return ' Vehicle parked, currently charging! '
+            else if(states[variables.engine].state  == 'off' && states[variables.cable].state == 'on' && states[variables.charging].state == 'on') {
+              return ' Vehicle parked and charging! '
             }
             else {
               return ' Running away from you! '
@@ -98,6 +200,7 @@
               ha-card {
                 box-shadow: none;
                 background: none;
+                padding-top: 5rem
               }
           image: >
             [[[ return variables.image ]]]
@@ -316,7 +419,6 @@
                   - value: "off"
                     styles:
                       icon:
-                        - icon: mdi:locked
                         - color: "var(--contrast-100)"
                       state: 
                         - font-size: "var(--fs-400)"
@@ -324,7 +426,6 @@
                         - font-weight: 500
                         - color: "var(--contrast-100)"
                   - value: "on"
-                    icon: mdi:lock-open-outline
                     styles:
                       card:
                         - background: "var(--contrast-100)"
@@ -332,9 +433,9 @@
                         - font-size: "var(--fs-400)"
                         - font-family: Montserrat
                         - font-weight: 500
-                        - color: "var(--contrast-100)"
+                        - color: "var(--contrast-0)"
                       icon:
-                        - color: "var(--contrast-100)"
+                        - color: "var(--contrast-0)"
                       custom_fields:
                         icon:
                           - color: "var(--contrast-0)"
@@ -360,7 +461,6 @@
                   - value: "off"
                     styles:
                       icon:
-                        - icon: mdi:locked
                         - color: "var(--contrast-100)"
                       state: 
                         - font-size: "var(--fs-400)"
@@ -368,7 +468,6 @@
                         - font-weight: 500
                         - color: "var(--contrast-100)"
                   - value: "on"
-                    icon: mdi:lock-open-outline
                     styles:
                       card:
                         - background: "var(--contrast-100)"
@@ -376,9 +475,9 @@
                         - font-size: "var(--fs-400)"
                         - font-family: Montserrat
                         - font-weight: 500
-                        - color: "var(--contrast-100)"
+                        - color: "var(--contrast-0)"
                       icon:
-                        - color: "var(--contrast-100)"
+                        - color: "var(--contrast-0)"
                       custom_fields:
                         icon:
                           - color: "var(--contrast-0)"
@@ -391,4 +490,4 @@
                   card:
                     - border-radius: "var(--border-radius)"
                     - box-shadow: "var(--box-shadow)"
-                    - padding: 1rem
+                    - padding: 1rem     
