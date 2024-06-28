@@ -18,8 +18,9 @@ Note: You will need the following lovelace resources to make this work.
 
 # Tibber like button card
 
-This card was made to look similar to the buttons in the tibber app. 
 ![tibber](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/tibber_screenshot.png)
+
+This card was made to look similar to the buttons in the tibber app. 
 
 <details><summary>YAML code</summary>
 
