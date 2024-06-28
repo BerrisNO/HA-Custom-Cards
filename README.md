@@ -2,6 +2,8 @@
 My custom cards for Home Assistant.
 
 All cards are extentions of a already exisitng theme, [MiniHass MKII](https://github.com/fredrikpersson92/minihass/tree/main)
+<strong>Important:</strong> If you are not using the above mentioned theme, you will need to change all the colors manually for everything to work. 
+
 
 # Custom Vehicle Card
 
