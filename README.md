@@ -70,7 +70,7 @@ custom_fields:
   test:
     card:
       type: custom:button-card
-      entity: sensor.nordpool_kwh_krsand_nok_3_1000_025
+      entity: sensor.electricity_price
       show_state: false
       show_label: true
       show_icon: false
