@@ -21,7 +21,7 @@ Note: You will need the following lovelace resources to make this work.
 
 # Auto Entity with procentage bar (replaced the tibber like card)
 
-![tibber](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/tibber_screenshot.png)
+![screenshot](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/Skjermbilde%202024-07-20%20113954.png)
 
 This was mainly made for myself, to display what room has the most power consumtion. 
 It looks for the label "room", and returns all entities i have given the label "room". 
