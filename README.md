@@ -203,4 +203,4 @@ The rooms are then organized and positioned within a grid, with the room having 
 ```
 </details>
 
-I would like to thank [@dsellers1](https://github.com/dsellers1) for the big support on this Square border card!
+I would like to thank [@dsellers1](https://github.com/dsellers1) for the big support on this Square bar card!
