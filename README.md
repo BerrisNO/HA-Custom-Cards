@@ -39,7 +39,7 @@ show_icon: true
 show_state: true
 aspect_ratio: 1/1 
 # state_display is used to style the atributes with its own font size of 0.6em.
-# If you want, you can remove the shole state_display and use the normal states.
+# If you want, you can remove the whole state_display and use the normal states.
 state_display: >-
   [[[ return `${entity.state} <span style='font-size:0.6em
   '>${entity.attributes.unit_of_measurement}</span>` ]]] 
