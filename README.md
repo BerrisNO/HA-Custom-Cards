@@ -98,12 +98,13 @@ custom_fields:
 ```
 </details>
 
-# Auto Entity with procentage bar (replaced the tibber like card)
+# Square bar card (With auto entities)
 
 ![screenshot](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/Skjermbilde%202024-07-20%20113954.png)
 
-This was mainly made for myself, to display what room has the most power consumtion. 
-It looks for the label "room", and returns all entities i have given the label "room". 
+This card displays all entities labeled as "room" in the square bar card. 
+It calculates the percentage of total usage for each entity using a total active import sensor. 
+The rooms are then organized and positioned within a grid, with the room having the highest consumption placed in the upper left corner.
 
 
 
@@ -164,10 +165,10 @@ It looks for the label "room", and returns all entities i have given the label "
           custom_fields:
             progress: |
               [[[
-                const bar_thickness = 2; // thickness of the border
+                var bar_thickness = 2; // thickness of the border
                 var state = entity.state; 
-                const percentage = (state / states['sensor.ams_7494_p'].state) * 100; // I used my total power consumtion sensor
-                const threshold = states['sensor.ams_7494_p'].state; // Set a threshold for the progress bar, you can set it manually or use a sensor like i did. 
+                var percentage = (state / states['sensor.ams_7494_p'].state) * 100; // I used my total power consumtion sensor
+                var threshold = states['sensor.ams_7494_p'].state; // Set a threshold for the progress bar, you can set it manually or use a sensor like i did. 
                 if (percentage >= 90) var color = 'red';
                 else if (percentage >= 70) var color = 'orange';
                 else if (percentage >= 50) var color = 'orange';
@@ -176,7 +177,7 @@ It looks for the label "room", and returns all entities i have given the label "
                 var totalLength = 341;
                 var progress = (1 - state / threshold) * totalLength;
 
-                const svg = `
+                var svg = `
                   <svg id="progress-bar" fill="none" stroke-linecap="round" viewBox="0 0 100 100">
                     <path id="progress-path" d="M25,2.5
                       h50 a22.5,22.5 0 0 1 22.5,22.5   v50 a22.5,22.5 0 0 1 -22.5,22.5
