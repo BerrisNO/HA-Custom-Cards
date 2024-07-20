@@ -19,91 +19,107 @@ Note: You will need the following lovelace resources to make this work.
 * [button-card](https://github.com/custom-cards/button-card)
 * [lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod)
 
-# Tibber like button card
+# Auto Entity with procentage bar (replaced the tibber like card)
 
 ![tibber](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/tibber_screenshot.png)
 
-This card was made to look similar to the buttons in the tibber app. 
+This was mainly made for myself, to display what room has the most power consumtion. 
+It looks for the label "room", and returns all entities i have given the label "room". 
+
+
 
 <details><summary>YAML code</summary>
 
 ```yaml
-type: custom:button-card
-styles:
+- type: custom:auto-entities
   card:
-    - padding: 1rem
-    - background: |
-        [[[
-	  // Change the below 3 sensors with your state, min and max sensor. 
+    type: grid
+    columns: 4
+  card_param: cards
+  filter:
+    include:
+      - label:  room
+        options:
+          type: custom:button-card
+          entity_id: this.entity_id
+          state_display: >-
+              [[[ return `${entity.state} <span style='font-size:0.6em
+              '>${entity.attributes.unit_of_measurement}</span>` ]]]
+          layout: vertical
+          show_last_changed: false
+          show_state: true
+          aspect_ratio: 1/1
+          styles:
+            card:
+              
+              - border-radius: 25%
+            state:
+              - align-self: start
+              - padding: 5px
+              - font-size: 13px
+              - font-family: Montserrat
+              - font-weight: 500
+              - overflow: visible
+            img_cell:
+              - overflow: visible
+            icon:
+              - justify-self: start
+              - align-self: start
+              - overflow: visible
+              - color: var(--color-gold)
+            name:
+              - font-size: var(--fs-300)
+              - font-family: Montserrat
+              - font-weight: 500
+              - color: var(--color-dark-gray)
+              - overflow: hidden
+            custom_fields:
+              progress:
+                - position: absolute
+                - width: 100%
+                - height: 100%
+                - display: flex
+                - align-items: center
+                - justify-content: center
+                - overflow: visible
+          custom_fields:
+            progress: |
+              [[[
+                const bar_thickness = 2; // thickness of the border
+                var state = entity.state; 
+                const percentage = (state / states['sensor.ams_7494_p'].state) * 100; // I used my total power consumtion sensor
+                const threshold = states['sensor.ams_7494_p'].state; // Set a threshold for the progress bar, you can set it manually or use a sensor like i did. 
+                if (percentage >= 90) var color = 'red';
+                else if (percentage >= 70) var color = 'orange';
+                else if (percentage >= 50) var color = 'orange';
+                else if (percentage >= 30) var color = 'lightgreen';
+                else var color = 'lightgreen';
+                var totalLength = 341;
+                var progress = (1 - state / threshold) * totalLength;
 
-          const currentPrice = parseFloat(states['sensor.elctricity_price'].state);
-          const minPrice = parseFloat(states['sensor.elctricity_price'].attributes.min);
-          const maxPrice = parseFloat(states['sensor.elctricity_price'].attributes.max);
-          
-          // Calculate the percentage of the current price between min and max price
-          const percentage = (currentPrice - minPrice) / (maxPrice - minPrice) * 100;
-          
-          // Calculate the degrees for the conic-gradient
-          const degrees = Math.min((percentage / 100) * 360);
-          
-          // Determine the color based on the percentage
-          let color;
-          if (percentage <= 33) { 
-            color = 'lime';
-          } else if (percentage <= 80) {
-            color = 'orange';
-          } else {
-            color = 'red';
-          }
-          
-          // Return the conic-gradient CSS value
-          return `conic-gradient(${color} ${degrees}deg, black 0deg)`;
-        ]]]
-    - aspect-ratio: 2
-    - border-radius: var(--border-radius)
-  custom_fields:
-    test:
-      - width: calc(100% - 0.4rem)
-      - height: calc(100% - 0.4rem)
-      - left: 0.22rem
-      - background: var(--contrast-0)
-      - position: absolute
-      - border-radius: 1rem
-custom_fields:
-  test:
-    card:
-      type: custom:button-card
-      entity: sensor.electricity_price
-      show_state: false
-      show_label: true
-      show_icon: false
-      label: >
-        [[[ return states['sensor.electricity_price'].state +
-        '<span style="font-size:0.5em "> øre</span>' ]]]
-      styles:
-        grid:
-          - grid-template-areas: '"l l" "n n"'
-          - grid-template-rows: 1fr 1fr
-          - grid-template-columns: 1fr 1fr
-        card:
-          - background: none
-        label:
-          - padding-top: 10%
-          - text-align: center
-          - font-size: var(--fs-600)
-          - font-family: Montserrat
-          - font-weight: 600
-          - color: var(--contrast-100)
-          - overflow: visible
-        name:
-          - text-align: center
-          - font-size: var(--fs-400)
-          - font-family: Montserrat
-          - font-weight: 500
-          - justify-self: top
-          - align-self: start
-          - color: var(--contrast-100)
-          - overflow: visible
+                const svg = `
+                  <svg id="progress-bar" fill="none" stroke-linecap="round" viewBox="0 0 100 100">
+                    <path id="progress-path" d="M25,2.5
+                      h50 a22.5,22.5 0 0 1 22.5,22.5   v50 a22.5,22.5 0 0 1 -22.5,22.5
+                      h-50 a22.5,22.5 0 0 1 -22.5,-22.5   v-50 a22.5,22.5 0 0 1 22.5,-22.5" />
 
+                  </svg>
+                  <style>
+                    #progress-path {
+                      stroke: ${color};
+                      stroke-width: ${bar_thickness};
+                      stroke-dasharray: ${totalLength};
+                      stroke-dashoffset: ${progress};
+                      transition: stroke-dashoffset 1s linear;
+                    }
+                  </style>
+                `;
+                return svg;
+              ]]]
+  sort:
+    method: state
+    numeric: true
+    reverse: true
+    count: 8
 ```
 </details>
