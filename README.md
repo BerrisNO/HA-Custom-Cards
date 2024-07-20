@@ -27,7 +27,7 @@ It can be used for many other things, but this code is spesifically made for pow
 
 <strong>Note:</strong>  This card has to be in a square for it to work, otherwise the progress bar will be broken.
 
-```
+```yaml
 type: custom:button-card
 entity: sensor.ams_7494_p #Entity of your power consuimtion
 show_name: true 
