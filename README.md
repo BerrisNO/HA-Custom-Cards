@@ -30,7 +30,6 @@ It can be used for many other things, but this code is spesifically made for pow
 <details><summary>YAML code</summary>
 
 ```yaml
-```yaml
 type: custom:button-card
 entity: sensor.ams_7494_p #Entity of your power consuimtion
 show_name: true 
