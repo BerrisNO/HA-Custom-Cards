@@ -202,3 +202,5 @@ The rooms are then organized and positioned within a grid, with the room having 
     count: 8
 ```
 </details>
+
+I would like to thank [@dsellers1]([https://github.com/RomRider](https://github.com/dsellers1) for the big support on this Square border card!
