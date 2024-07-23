@@ -203,4 +203,114 @@ The rooms are then organized and positioned within a grid, with the room having 
 ```
 </details>
 
+# Circle bar card (Power consumption). 
+The above card just with a 50% radius, making it a circle
+
+[![Circle_bar_card](https://github.com/BerrisNO/images/blob/main/circle.PNG)
+
+<strong>Note:</strong>  This card has to be in a square for it to work, otherwise the progress bar will be broken.
+
+<details><summary>YAML code</summary>
+
+```yaml
+type: custom:button-card
+entity: sensor.power_stue
+variables:
+  card_radius: 50%
+  icon_height: 150
+  icon_width: 150
+  sensor_threshold: sensor.ams_7494_p # Add your threshold sensor or replace with a set number.
+  bar_thickness: null # Default: 3
+  bar_bg_thickness: null # Default: 3
+  bar_bg_opacity: null # Default: 0.5
+  bar_bg_color: null # Default: grat
+show_name: true
+show_icon: true
+show_state: true
+name: Active Import
+icon: mdi:transmission-tower
+aspect_ratio: 1/1
+state_display: >-
+  [[[ return `${entity.state} <span style='font-size:0.6em
+  '>${entity.attributes.unit_of_measurement}</span>` ]]]
+styles:
+  card:
+    - border-radius: '[[[ return variables.card_radius ]]]'
+  state:
+    - font-size: 150%
+    - font-family: Montserrat
+    - font-weight: 500
+    - overflow: visible
+    - align-self: start
+    - text-align: start
+    - padding-bottom: 15%
+  img_cell:
+    - height: '[[[ return `${variables.icon_height ?? 120}` ]]]'
+    - height: '[[[ return `${variables.icon_width ?? 120}` ]]]'
+    - align-self: center
+  icon:
+    - justify-self: start
+    - align-self: start
+    - overflow: visible
+    - color: var(--color-gold)
+  name:
+    - font-family: Montserrat
+    - font-weight: 500
+    - color: var(--color-dark-gray)
+    - align-self: end
+    - text-align: end
+  custom_fields:
+    progress:
+      - position: absolute
+      - width: 100%
+      - height: 100%
+      - display: flex
+      - align-items: center
+      - justify-content: center
+      - overflow: visible
+custom_fields:
+  progress: |
+    [[[
+      var state = entity.state;
+      var threshold = states[variables.sensor_threshold].state
+      var percentage = (state / states[variables.sensor_threshold].state) * 100
+      if (percentage >= 90) var color = 'red';
+      else if (percentage >= 70) var color = 'orange';
+      else if (percentage >= 50) var color = 'yellow';
+      else if (percentage >= 30) var color = 'lightgreen';
+      else var color = 'lightgreen';
+      var totalLength = 315;
+      var progress = (1 - state / threshold) * totalLength;
+
+      var svg = `
+        <svg id="progress-bar" fill="none"  viewBox="0 0 100 100" width: 100%; height: 100%;>
+          <path id="background-path" d="M50,0.2
+                h0 a50,50 0 0 1 50,50 v0 a50,50 0 0 1 -50,50
+                h0 a50,50 0 0 1 -50,-50 v0 a50,50 0 0 1 50,-50" />
+          <path id="progress-path" d="M50,0.2
+                h0 a50,50 0 0 1 50,50 v0 a50,50 0 0 1 -50,50
+                h0 a50,50 0 0 1 -50,-50 v0 a50,50 0 0 1 50,-50" />
+        </svg>
+        <style>
+          #background-path {
+            opacity: ${variables.bar_bg_opacity ?? 0.2};
+            stroke: ${variables.bar_bg_color ?? "gray"};
+            stroke-width: ${variables.bar_bg_thickness ?? 3};
+          }
+          #progress-path {
+            stroke: ${color};
+            stroke-width: ${variables.bar_thickness ?? 3};
+            stroke-dasharray: ${totalLength};
+            stroke-dashoffset: ${progress};
+            transition: stroke-dashoffset 1s linear;
+          }
+        </style>
+      `;
+      return svg;
+    ]]]
+
+```
+</details>
+
+
 I would like to thank [@dsellers1](https://github.com/dsellers1) for the big support on this Square bar card!
