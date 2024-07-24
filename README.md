@@ -24,7 +24,7 @@ This card will give you a graphical representation of how much total power you a
 It can be used for many other things, but this code is spesifically made for power consumption. 
 
 
-![Square_bar_card](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/img/square.PNG)
+![Square_bar_card](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/img/square.png)
 
 <strong>Note:</strong>  This card has to be in a square for it to work, otherwise the progress bar will be broken.
 
