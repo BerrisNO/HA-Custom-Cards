@@ -27,29 +27,58 @@ It can be used for many other things, but this code is spesifically made for pow
 
 <strong>Note:</strong>  This card has to be in a square for it to work, otherwise the progress bar will be broken.
 
+<strong>Updates:</strong>
+<strong>24.07.2024</strong> Added variables in the top of the card, to minimise the need to make changes to the whole card. 
+
 <details><summary>YAML code</summary>
 
 ```yaml
 type: custom:button-card
-entity: sensor.ams_7494_p #Entity of your power consuimtion
-show_name: true 
-name: Active Import 
-icon: mdi:transmission-tower
+entity: sensor.power_stue #dd your main sensor
+variables:
+  card_radius: null # Default 25% (does not change the radius of the bar, only the card.
+  icon_height: null # Default 120 % 
+  icon_width: null # Default 120 %
+  sensor_threshold: sensor.ams_7494_p # Add your threshold sensor or replace with a set number.
+  bar_thickness: null # Default: 3
+  bar_bg_thickness: null # Default: 3
+  bar_bg_opacity: null # Default: 0.5
+  bar_bg_color: null # Default: grat
+show_name: true
 show_icon: true
 show_state: true
-aspect_ratio: 1/1 
-# state_display is used to style the atributes with its own font size of 0.6em.
-# If you want, you can remove the whole state_display and use the normal states.
+name: Active Import
+icon: mdi:transmission-tower
+aspect_ratio: 1/1
 state_display: >-
   [[[ return `${entity.state} <span style='font-size:0.6em
-  '>${entity.attributes.unit_of_measurement}</span>` ]]] 
+  '>${entity.attributes.unit_of_measurement}</span>` ]]]
 styles:
   card:
-    - border-radius: 25%
+    - border-radius: '[[[ return `${variables.card_radius ?? 25}%` ]]]'
   state:
-    - font-size: 15px
+    - font-size: 150%
+    - font-family: Montserrat
+    - font-weight: 500
+    - overflow: visible
+    - align-self: start
+    - text-align: start
+    - padding-bottom: 15%
+  img_cell:
+    - height: '[[[ return `${variables.icon_height ?? 120}%` ]]]'
+    - height: '[[[ return `${variables.icon_width ?? 120}%` ]]]'
+    - align-self: center
+  icon:
+    - justify-self: start
+    - align-self: start
+    - overflow: visible
+    - color: var(--color-gold)
   name:
-    - font-size: 10px
+    - font-family: Montserrat
+    - font-weight: 500
+    - color: var(--color-dark-gray)
+    - align-self: end
+    - text-align: end
   custom_fields:
     progress:
       - position: absolute
@@ -62,29 +91,35 @@ styles:
 custom_fields:
   progress: |
     [[[
-      var bar_thickness = 2; // you can change the thickness of the bar here
-      var state = entity.state; // fetches the entity.state from line 2
-      var percentage = (state / 5000) * 100; // this code is only ment for finding the percentage of state, to change the color.
-      var threshold = 5000 // threshold is used for setting a max width of the bar, you can set a own sensor here if needed. 
+      var state = entity.state;
+      var threshold = states[variables.sensor_threshold].state
+      var percentage = (state / states[variables.sensor_threshold].state) * 100
       if (percentage >= 90) var color = 'red';
       else if (percentage >= 70) var color = 'orange';
       else if (percentage >= 50) var color = 'yellow';
-      else if (percentage >= 30) var color = 'green';
+      else if (percentage >= 30) var color = 'lightgreen';
       else var color = 'lightgreen';
-      var totalLength = 341; 
+      var totalLength = 341;
       var progress = (1 - state / threshold) * totalLength;
 
       var svg = `
-        <svg id="progress-bar" fill="none" stroke-linecap="round" viewBox="0 0 100 100">
+        <svg id="progress-bar" fill="none"  viewBox="0 0 100 100";>
+          <path id="background-path" d="M25,2.5
+                h50 a22.5,22.5 0 0 1 22.5,22.5   v50 a22.5,22.5 0 0 1 -22.5,22.5
+                h-50 a22.5,22.5 0 0 1 -22.5,-22.5   v-50 a22.5,22.5 0 0 1 22.5,-22.5" />
           <path id="progress-path" d="M25,2.5
-            h50 a22.5,22.5 0 0 1 22.5,22.5   v50 a22.5,22.5 0 0 1 -22.5,22.5
-            h-50 a22.5,22.5 0 0 1 -22.5,-22.5   v-50 a22.5,22.5 0 0 1 22.5,-22.5" />
-
+                h50 a22.5,22.5 0 0 1 22.5,22.5   v50 a22.5,22.5 0 0 1 -22.5,22.5
+                h-50 a22.5,22.5 0 0 1 -22.5,-22.5   v-50 a22.5,22.5 0 0 1 22.5,-22.5" />
         </svg>
         <style>
+          #background-path {
+            opacity: ${variables.bar_bg_opacity ?? 0.2};
+            stroke: ${variables.bar_bg_color ?? "gray"};
+            stroke-width: ${variables.bar_bg_thickness ?? 1};
+          }
           #progress-path {
             stroke: ${color};
-            stroke-width: ${bar_thickness};
+            stroke-width: ${variables.bar_thickness ?? 2};
             stroke-dasharray: ${totalLength};
             stroke-dashoffset: ${progress};
             transition: stroke-dashoffset 1s linear;
@@ -93,7 +128,6 @@ custom_fields:
       `;
       return svg;
     ]]]
-
 ```
 </details>
 
@@ -206,9 +240,9 @@ The rooms are then organized and positioned within a grid, with the room having 
 # Circle bar card (Power consumption). 
 The above card just with a 50% radius, making it a circle
 
-[![Circle_bar_card](https://github.com/BerrisNO/images/blob/main/circle.PNG)
+![Circle_bar_card](https://github.com/BerrisNO/images/blob/main/circle.PNG)
 
-<strong>Note:</strong>  This card has to be in a square for it to work, otherwise the progress bar will be broken.
+<strong>Note:</strong>  This card has to be in a square / aspect_ratio: 1/1 for it to work, otherwise the progress bar will be broken.
 
 <details><summary>YAML code</summary>
 
