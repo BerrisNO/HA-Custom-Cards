@@ -23,7 +23,8 @@ Note: You will need the following lovelace resources to make this work.
 This card will give you a graphical representation of how much total power you are using. 
 It can be used for many other things, but this code is spesifically made for power consumption. 
 
-![Square_bar_card](https://github.com/BerrisNO/images/blob/main/Skjermbilde%202024-07-20%20142558.png)
+
+![Square_bar_card]((https://github.com/BerrisNO/HA-Custom-Cards/blob/main/img/square.PNG)
 
 <strong>Note:</strong>  This card has to be in a square for it to work, otherwise the progress bar will be broken.
 
@@ -239,8 +240,7 @@ The rooms are then organized and positioned within a grid, with the room having 
 
 # Circle bar card (Power consumption). 
 The above card just with a 50% radius, making it a circle
-
-![Circle_bar_card](https://github.com/BerrisNO/images/blob/main/circle.PNG)
+![Circle_bar_card](https://github.com/BerrisNO/HA-Custom-Cards/blob/main/img/circle.PNG)
 
 <strong>Note:</strong>  This card has to be in a square / aspect_ratio: 1/1 for it to work, otherwise the progress bar will be broken.
 
